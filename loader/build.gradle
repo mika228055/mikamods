@@ -32,7 +32,7 @@ dependencies {
 
     // LaunchWrapper (Minecraft uses this)
     compileOnly 'net.minecraft:launchwrapper:1.12'
-    compileOnly files('named.jar')
+    compileOnly files('1.16.5-named.jar')
 
     // Needed by Mixin
     implementation 'org.ow2.asm:asm:6.2'
