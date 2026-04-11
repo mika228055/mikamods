@@ -1,0 +1,21 @@
+{
+  "id": "examplemod",
+  "main": "net.mika.example.ExampleMod",
+  "version": "1.0",
+  "mixins": [
+  ],
+  "depends": [
+    {
+      "id": "mikamods",
+      "version": ">=0.0.1"
+    },
+    {
+      "id": "minecraft",
+      "version": "1.16.5"
+    },
+    {
+      "id": "java",
+      "version": "8"
+    }
+  ]
+}

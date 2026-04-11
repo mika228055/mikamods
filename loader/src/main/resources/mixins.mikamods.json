@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.7.11",
+  "package": "net.mika.mikamods.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinResourcePackManager"
+  ],
+  "client": [
+    "client.MixinSplashScreen",
+    "client.MixinTitleScreen",
+    "client.MixinClientBrandRetriever"
+  ],
+  "server": []
+}
