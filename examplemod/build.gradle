@@ -29,6 +29,7 @@ dependencies {
     compileOnly "com.mojang:brigadier:1.0.17"
     compileOnly "com.mojang:javabridge:1.0.22"
     compileOnly "com.mojang:patchy:1.3.9"
+    compileOnly files('1.16.5-named.jar')
 }
 
 jar {
