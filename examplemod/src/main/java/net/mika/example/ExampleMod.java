@@ -6,12 +6,14 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
+import net.mika.mikamods.api.ModInitializer;
 import net.minecraft.util.registry.Registry;
 
-public class ExampleMod {
-    public static Block exampleBlock;
+public class ExampleMod implements ModInitializer {
+    public ExampleMod() {
+    }
 
-    public static void onInitialize() {
+    public void onInitialize() {
         System.out.println("examplemod initialized");
 
         Registry.register(Registry.ITEM, new Identifier("examplemod", "example_item"), new Item(new Item.Settings().group(ItemGroup.TOOLS)));

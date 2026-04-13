@@ -93,8 +93,13 @@ public class ModLoader {
 
             try {
                 Class<?> clazz = classLoader.loadClass(mod.mainClass);
-                Method init = clazz.getMethod("onInitialize");
-                init.invoke(null);
+
+                Object instance = clazz.getDeclaredConstructor().newInstance();
+
+                net.mika.mikamods.api.ModInitializer modInstance =
+                        (net.mika.mikamods.api.ModInitializer) instance;
+
+                modInstance.onInitialize();
 
                 LoggerUtil.info("Initialized mod: " + mod.id);
 
@@ -104,9 +109,6 @@ public class ModLoader {
         }
     }
 
-    // =========================
-    // 🔥 Core: load mod jar
-    // =========================
     private static void loadModFromJar(File file) {
         try {
             String path = file.getAbsolutePath();
@@ -156,7 +158,6 @@ public class ModLoader {
                 }
             }
 
-            // 🔥 jars (jar-in-jar)
             List<String> jars = new ArrayList<>();
             if (json.has("jars")) {
                 for (JsonElement el : json.getAsJsonArray("jars")) {
@@ -164,7 +165,6 @@ public class ModLoader {
                 }
             }
 
-            // 🔥 load embedded jars FIRST
             for (String jarPath : jars) {
                 JarEntry nested = jar.getJarEntry(jarPath);
 
