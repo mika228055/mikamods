@@ -9,7 +9,8 @@
   "client": [
     "client.MixinSplashScreen",
     "client.MixinTitleScreen",
-    "client.MixinClientBrandRetriever"
+    "client.MixinClientBrandRetriever",
+    "client.MixinMinecraftClient"
   ],
   "server": []
 }

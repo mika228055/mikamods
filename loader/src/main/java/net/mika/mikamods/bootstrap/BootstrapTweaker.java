@@ -66,6 +66,7 @@ public class BootstrapTweaker implements ITweaker {
         classLoader.addClassLoaderExclusion("org.objectweb.asm.");
         classLoader.addClassLoaderExclusion("net.mika.mikamods.bootstrap.");
         classLoader.addClassLoaderExclusion("net.mika.mikamods.api.");
+        classLoader.addClassLoaderExclusion("net.mika.mikamods.event.");
 
         try {
             InputStream is = classLoader.getResourceAsStream("mikamods.accesswidener");

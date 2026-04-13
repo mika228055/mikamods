@@ -1,5 +1,7 @@
 package net.mika.example;
 
+import net.mika.mikamods.event.EventBus;
+import net.mika.mikamods.event.events.ClientTickEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
@@ -11,6 +13,9 @@ import net.minecraft.util.registry.Registry;
 
 public class ExampleMod implements ModInitializer {
     public ExampleMod() {
+    }
+
+    public void onTick() {
     }
 
     public void onInitialize() {
@@ -26,5 +31,9 @@ public class ExampleMod implements ModInitializer {
         // Register the BlockItem (so it appears in inventory)
         Registry.register(Registry.ITEM, new Identifier("examplemod", "example_block"),
                 new BlockItem(exampleBlock, new Item.Settings().group(ItemGroup.TOOLS)));
+
+        EventBus.register(ClientTickEvent.class, event -> {
+            onTick();
+        });
     }
 }
