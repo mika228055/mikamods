@@ -1,5 +1,10 @@
 package net.mika.mikamods.bootstrap;
 
+import net.fabricmc.tinyremapper.IMappingProvider;
+import net.fabricmc.tinyremapper.TinyUtils;
+import net.mika.mikamods.access.AccessWidenerHolder;
+import net.mika.mikamods.access.AccessWidenerReader;
+import net.mika.mikamods.loader.ModLoader;
 import net.mika.mikamods.util.Constants;
 import net.mika.mikamods.util.LoggerUtil;
 import net.minecraft.launchwrapper.ITweaker;
@@ -67,6 +72,8 @@ public class BootstrapTweaker implements ITweaker {
         classLoader.addClassLoaderExclusion("net.mika.mikamods.bootstrap.");
         classLoader.addClassLoaderExclusion("net.mika.mikamods.api.");
         classLoader.addClassLoaderExclusion("net.mika.mikamods.event.");
+        classLoader.addClassLoaderExclusion("net.mika.mikamods.loader.");
+        classLoader.addClassLoaderExclusion("net.mika.mikamods.access");
 
         try {
             InputStream is = classLoader.getResourceAsStream("mikamods.accesswidener");
@@ -76,26 +83,7 @@ public class BootstrapTweaker implements ITweaker {
                 throw new RuntimeException();
             }
 
-            Class<?> awClass = classLoader.loadClass(
-                    "net.mika.mikamods.access.AccessWidener"
-            );
-
-            Class<?> readerClass = classLoader.loadClass(
-                    "net.mika.mikamods.access.AccessWidenerReader"
-            );
-
-            java.lang.reflect.Method readMethod =
-                    readerClass.getMethod("read", InputStream.class);
-
-            Object awInstance = readMethod.invoke(null, is);
-
-            Class<?> holderClass = classLoader.loadClass(
-                    "net.mika.mikamods.access.AccessWidenerHolder"
-            );
-
-            java.lang.reflect.Field field = holderClass.getDeclaredField("INSTANCE");
-            field.setAccessible(true);
-            field.set(null, awInstance);
+            AccessWidenerHolder.INSTANCE = AccessWidenerReader.read(is);
 
             classLoader.registerTransformer("net.mika.mikamods.access.AccessWidenerTransformer");
         } catch (Exception e) {
@@ -105,16 +93,7 @@ public class BootstrapTweaker implements ITweaker {
         String gameDirStr = args.get("--gameDir");
         Path gameDir = Paths.get(gameDirStr);
         Path modsDir = Paths.get(gameDir.toString(), "mods");
-        try {
-            Class<?> modLoaderClass = classLoader.loadClass("net.mika.mikamods.loader.ModLoader");
-            Method init = modLoaderClass.getMethod("init", LaunchClassLoader.class, Path.class);
-            init.invoke(null, classLoader, modsDir);
-
-            Method loadMods = modLoaderClass.getMethod("loadMods");
-            loadMods.invoke(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ModLoader.init(classLoader, modsDir);
     }
 
     @Override

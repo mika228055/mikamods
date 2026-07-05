@@ -7,10 +7,10 @@
     "MixinResourcePackManager"
   ],
   "client": [
-    "client.MixinSplashScreen",
     "client.MixinTitleScreen",
     "client.MixinClientBrandRetriever",
-    "client.MixinMinecraftClient"
+    "client.MixinMinecraftClient",
+    "client.MixinDebugHud"
   ],
   "server": []
 }

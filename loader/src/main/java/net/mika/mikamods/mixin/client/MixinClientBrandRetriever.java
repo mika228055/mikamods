@@ -8,6 +8,10 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(ClientBrandRetriever.class)
 public class MixinClientBrandRetriever {
+    /**
+     * @author mika228055
+     * @reason for in-game f3 menu show mikamods profile
+     */
     @Overwrite
     public static String getClientModName() {
         return "MikaMods v" + Constants.MODLOADER_VERSION;

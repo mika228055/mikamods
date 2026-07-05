@@ -1,5 +1,8 @@
-package net.mika.mikamods.loader;
+package net.mika.mikamods.client;
 
+import net.mika.mikamods.loader.ModContainer;
+import net.mika.mikamods.loader.ModLoader;
+import net.mika.mikamods.util.LoggerUtil;
 import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.ResourcePackSource;
@@ -18,13 +21,15 @@ public class ModResourcePackProvider implements ResourcePackProvider {
                         true,
                         () -> new ZipResourcePack(mod.file),
                         factory,
-                        ResourcePackProfile.InsertionPosition.TOP,
-                        ResourcePackSource.PACK_SOURCE_BUILTIN
+                        ResourcePackProfile.InsertionPosition.field_14281,
+                        ResourcePackSource.field_25348
                 );
 
                 if (profile != null) {
                     profileAdder.accept(profile);
                 }
+
+                LoggerUtil.info("Added resource pack for mod: " + mod.id);
 
             } catch (Exception e) {
                 e.printStackTrace();

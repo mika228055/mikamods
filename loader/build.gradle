@@ -24,6 +24,8 @@ repositories {
 
 dependencies {
     implementation 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+    implementation "net.fabricmc:tiny-remapper:0.10.4"
+    implementation "net.fabricmc:mapping-io:0.6.1"
 
     compileOnly "com.mojang:datafixerupper:4.0.26"
     compileOnly "com.mojang:brigadier:1.0.17"
