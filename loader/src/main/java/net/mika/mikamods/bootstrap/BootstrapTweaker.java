@@ -94,6 +94,7 @@ public class BootstrapTweaker implements ITweaker {
         Path gameDir = Paths.get(gameDirStr);
         Path modsDir = Paths.get(gameDir.toString(), "mods");
         ModLoader.init(classLoader, modsDir);
+        //ModLoader.loadMods();
     }
 
     @Override

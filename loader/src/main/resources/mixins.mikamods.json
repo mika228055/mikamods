@@ -8,9 +8,10 @@
   ],
   "client": [
     "client.MixinTitleScreen",
-    "client.MixinClientBrandRetriever",
     "client.MixinMinecraftClient",
-    "client.MixinDebugHud"
+    "client.MixinDebugHud",
+    "client.MixinClientBrandRetriever",
+    "client.MixinBootstrap"
   ],
   "server": []
 }

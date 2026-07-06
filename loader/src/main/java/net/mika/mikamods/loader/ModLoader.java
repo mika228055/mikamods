@@ -1,8 +1,10 @@
 package net.mika.mikamods.loader;
 
 import com.google.gson.*;
+import net.mika.mikamods.resource.ModResourceRegistry;
 import net.mika.mikamods.util.Constants;
 import net.mika.mikamods.util.LoggerUtil;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.spongepowered.asm.mixin.Mixins;
 
@@ -27,6 +29,19 @@ public class ModLoader {
 
     public static List<ModContainer> getMods() {
         return mods;
+    }
+
+    private static void fatal(String title, String message) {
+        List<String> errors = new ArrayList<>();
+        errors.add(message);
+
+        PreLaunchErrorWindow.forkAndShow(title, errors);
+        throw new RuntimeException(message);
+    }
+
+    private static void fatal(String title, List<String> errors) {
+        PreLaunchErrorWindow.forkAndShow(title, errors);
+        throw new RuntimeException(errors.get(0));
     }
 
     public static void loadMods() {
@@ -74,13 +89,13 @@ public class ModLoader {
 
                 if (target == null) {
                     if (dep.required) {
-                        throw new RuntimeException("Missing dependency: " + dep.id + " for " + mod.id);
+                        fatal("Missing dependency", "Missing dependency: " + dep.id + " for " + mod.id + ", required version: " + dep.version);
                     }
                     continue;
                 }
 
                 if (!matches(dep.version, target.version)) {
-                    throw new RuntimeException("Version mismatch: " + dep.id);
+                    fatal("Version mismatch", "Version mismatch: " + dep.id + " for mod " + mod.id + ", required: " + dep.version + " installed: " + target.version);
                 }
             }
         }
@@ -104,7 +119,10 @@ public class ModLoader {
                 LoggerUtil.info("Initialized mod: " + mod.id);
 
             } catch (Throwable t) {
-                throw new RuntimeException("Failed to init mod: " + mod.id, t);
+                List<String> errors = new ArrayList<>();
+                errors.add("Failed to init mod: " + mod.id);
+                errors.add(t.getMessage());
+                fatal("Failed to init mod", errors);
             }
         }
     }
@@ -181,10 +199,18 @@ public class ModLoader {
             ModContainer mod = new ModContainer(id, version, mainClass, mixins, file, deps, jars);
             mods.add(mod);
 
+            // we need to load class like this because if we load normally it`s get loaded by AppClassLoader and don`t work later
+            Class<?> clazz = Launch.classLoader.loadClass("net.mika.mikamods.resource.ModResourceRegistry");
+            Method method = clazz.getDeclaredMethod("registerMod", File.class);
+            method.invoke(null, mod.file);
+
             LoggerUtil.info("Loaded mod: " + id);
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed loading jar: " + file.getName(), e);
+            List<String> errors = new ArrayList<>();
+            errors.add("Failed loading jar: " + file.getName());
+            errors.add(e.getMessage());
+            fatal("Failed loading jar", errors);
         }
     }
 

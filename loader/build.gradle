@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+    implementation 'org.spongepowered:mixin:0.8.5'
     implementation "net.fabricmc:tiny-remapper:0.10.4"
     implementation "net.fabricmc:mapping-io:0.6.1"
 
