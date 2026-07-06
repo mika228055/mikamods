@@ -13,22 +13,12 @@ public class Remapper {
 
         System.out.println("Remapping jar on first launch... This may take few seconds");
 
-        InputStream intermediaryIn = Main.class.getResourceAsStream("/intermediary.tiny");
         InputStream yarnIn = Main.class.getResourceAsStream("/yarn.tiny");
-        BufferedReader intermediary = new BufferedReader(new InputStreamReader(intermediaryIn));
         BufferedReader yarn = new BufferedReader(new InputStreamReader(yarnIn));
+        IMappingProvider yarnMappings = TinyUtils.createTinyMappingProvider(yarn, "official", "named");
 
-        IMappingProvider intermediaryMappings = TinyUtils.createTinyMappingProvider(intermediary, "official", "intermediary");
-        IMappingProvider yarnMappings = TinyUtils.createTinyMappingProvider(yarn, "intermediary", "named");
-
-        Path temp = Files.createTempFile("mc-intermediary", ".jar");
-        Files.deleteIfExists(temp); // let tinyremapper create jar manually
-
-        remapJar(input, temp, intermediaryMappings, classPath);
-        remapJar(temp, output, yarnMappings, classPath);
+        remapJar(input, output, yarnMappings, classPath);
         copyResources(input, output);
-
-        Files.deleteIfExists(temp);
 
         System.out.println("Original jar: " + input + ", remapped jar: " + output);
     }
@@ -82,12 +72,12 @@ public class Remapper {
             String name = file.getName().toLowerCase();
 
             // Minecraft jar usually contains version in name
-            if (name.contains("1.16.5") && name.endsWith(".jar")) {
+            if (name.contains("1.16.5") && name.endsWith(".jar") && !name.contains("mikamods")) {
                 return Paths.get(file.getAbsolutePath());
             }
 
             // fallback heuristic
-            if (name.contains("minecraft") && name.endsWith(".jar")) {
+            if (name.contains("minecraft") && name.endsWith(".jar") && !name.contains("mikamods")) {
                 return Paths.get(file.getAbsolutePath());
             }
         }

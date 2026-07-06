@@ -48,7 +48,7 @@ dependencies {
 
 shadowJar {
     archiveClassifier.set('') // replace normal jar
-    archiveBaseName.set('MikaModsMixin')
+    archiveBaseName.set('MikaMods-1.16.5')
     archiveVersion.set('0.1-beta')
 
     // Exclude native libraries
